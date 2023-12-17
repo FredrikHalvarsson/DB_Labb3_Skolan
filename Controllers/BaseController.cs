@@ -24,18 +24,23 @@ namespace Labb3Skolan.Controllers
             bool success = false;
             do
             {
-                //Console.WriteLine("""Please input personal number (12 digits) with a "-" separating date of birth and the final four digits""");
-                Console.WriteLine("Please input personal number in they form of (yyyy-mm-dd:xxxx)");
+                Console.WriteLine("Please input personal number (12 digits, no special characters)");
                 personalNumber = Console.ReadLine();
 
-                if (personalNumber.Contains(":"))
+                if (personalNumber.Length==12)
                 {
-                    string[] sub = personalNumber.Split(":");
+                    //separate date and compose into valid date form
+                    string year = personalNumber.Substring(0, 4);
+                    string month = personalNumber.Substring(4, 2);
+                    string day = personalNumber.Substring(6, 2);
+                    string composedDate = year+"-"+month+"-"+day;
+                    //separate final 4 digits
+                    string final4 = personalNumber.Substring(8, 4);
+                    Console.WriteLine(composedDate+"-"+final4);
 
-                    if (sub[0].Length == 10
-                    && sub[1].Length == 4
-                    && DateTime.TryParse(sub[0], out date)
-                    && int.TryParse(sub[1], out i))
+                    //check if parsable to date and int
+                    if (DateTime.TryParse(composedDate, out date)
+                    && int.TryParse(final4, out i))
                     {
                         success = true;
                     }

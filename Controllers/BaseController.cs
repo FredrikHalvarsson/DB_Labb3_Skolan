@@ -13,7 +13,7 @@ namespace Labb3Skolan.Controllers
     {
         protected readonly SlotteGymnasietContext context = new SlotteGymnasietContext();
         /// <summary>
-        /// Checks to see if Personal number is valid, separating date of birth and final four digits
+        /// Handles input of personal number and checks to see if it's valid
         /// </summary>
         /// <returns>PersonalNumber</returns>
         internal string SetPersonalNumber()

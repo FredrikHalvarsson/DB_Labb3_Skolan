@@ -38,7 +38,7 @@ namespace Labb3Skolan.Controllers
             
             foreach (var item in studentList)
             {
-                Console.WriteLine(item.FirstName + "" + item.LastName);
+                Console.WriteLine(item.FirstName + " " + item.LastName);
             }
         }
         internal void AddStudent()
@@ -59,6 +59,8 @@ namespace Labb3Skolan.Controllers
             context.Students.Add(student);
             Console.WriteLine("Student added!");
             context.SaveChanges();
+
+            //Need to create another method to add student to existing courses 
         }
     }
 }

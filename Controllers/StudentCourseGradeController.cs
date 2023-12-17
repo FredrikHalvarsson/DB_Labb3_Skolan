@@ -37,6 +37,7 @@ namespace Labb3Skolan.Controllers
             }
             return studentGrades;
         }
+        //Created for possible future use
         internal List<StudentCourseGrade> GetStudentGradesInCourse(int courseId, int order)
         {
             var courseGrades = context.Set<StudentCourseGrade>()

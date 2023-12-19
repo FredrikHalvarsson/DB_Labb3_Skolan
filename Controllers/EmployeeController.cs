@@ -10,53 +10,55 @@ namespace Labb3Skolan.Controllers
 {
     internal class EmployeeController : BaseController
     {
-        internal List<Employee> GetEmployeesByRole(int order, string role)
+        internal IOrderedEnumerable<Employee> GetEmployeesByRole(int order, string role)
         {
             var allEmployees = context.Set<Employee>()
                 .Include(x=>x.Role)
                 .Where(x=>x.Role.RoleName.Contains($"{role}"))
                 .ToList();
-            
+
+            var employeesByRole = allEmployees.OrderBy(x => x.LastName);
             if (order == 1/*"lastnameasc"*/)
             {
-                allEmployees.OrderBy(x => x.LastName);
+                employeesByRole=allEmployees.OrderBy(x => x.LastName);
             }
             if (order == 2/*"firstnameasc"*/)
             {
-                allEmployees.OrderBy(x => x.FirstName);
+                employeesByRole = allEmployees.OrderBy(x => x.FirstName);
             }
             if (order == 3/*lastnamedesc*/)
             {
-                allEmployees.OrderByDescending(x => x.LastName);
+                employeesByRole = allEmployees.OrderByDescending(x => x.LastName);
             }
             if (order == 4/*"firstnamedesc"*/)
             {
-                allEmployees.OrderByDescending(x => x.FirstName);
+                employeesByRole = allEmployees.OrderByDescending(x => x.FirstName);
             }
-            return allEmployees;
+            return employeesByRole;
         }
-        internal List<Employee> GetAllEmployees(int order)
+        internal IOrderedEnumerable<Employee> GetAllEmployees(int order)
         {
             var allEmployees = context.Set<Employee>()
                 .ToList();
 
+            var employeeList = allEmployees.OrderBy(x => x.LastName);
             if (order == 1/*"lastnameasc"*/)
             {
-                allEmployees.OrderBy(x => x.LastName);
+                employeeList=allEmployees.OrderBy(x => x.LastName);
             }
             if (order == 2/*"firstnameasc"*/)
             {
-                allEmployees.OrderBy(x => x.FirstName);
+                employeeList = allEmployees.OrderBy(x => x.FirstName);
             }
             if (order == 3/*lastnamedesc*/)
             {
-                allEmployees.OrderByDescending(x => x.LastName);
+                employeeList = allEmployees.OrderByDescending(x => x.LastName);
             }
             if (order == 4/*"firstnamedesc"*/)
             {
-                allEmployees.OrderByDescending(x => x.FirstName);
+                employeeList = allEmployees.OrderByDescending(x => x.FirstName);
             }
-            return allEmployees;
+            return employeeList;
         }
         internal void Print()
         {

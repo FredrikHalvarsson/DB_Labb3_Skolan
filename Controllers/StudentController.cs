@@ -9,26 +9,27 @@ namespace Labb3Skolan.Controllers
 {
     internal class StudentController : BaseController
     {
-        internal List<Student> GetStudents(int order)
+        internal IOrderedEnumerable<Student> GetStudents(int order)
         {
             var allStudents = context.Set<Student>().ToList();
+            var studentList = allStudents.OrderBy(x => x.LastName);
             if (order == 1/*"lastnameasc"*/)
             {
-                allStudents.OrderBy(x => x.LastName);
+                studentList=allStudents.OrderBy(x => x.LastName);
             }
             if (order == 2/*"firstnameasc"*/)
             {
-                allStudents.OrderBy(x => x.FirstName);
+                studentList = allStudents.OrderBy(x => x.FirstName);
             }
             if (order == 3/*lastnamedesc*/)
             {
-                allStudents.OrderByDescending(x => x.LastName);
+                studentList = allStudents.OrderByDescending(x => x.LastName);
             }
             if (order == 4/*"firstnamedesc"*/)
             {
-                allStudents.OrderByDescending(x => x.FirstName);
+                studentList = allStudents.OrderByDescending(x => x.FirstName);
             }
-            return allStudents;
+            return studentList;
         }
         internal void PrintStudents()
         {

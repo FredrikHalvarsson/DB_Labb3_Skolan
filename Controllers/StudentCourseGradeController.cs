@@ -11,56 +11,60 @@ namespace Labb3Skolan.Controllers
     internal class StudentCourseGradeController : BaseController
     {
         internal CourseController courseController = new CourseController();
-        internal List<StudentCourseGrade> GetStudentGrades(int studentId, int order)
+        internal IOrderedEnumerable<StudentCourseGrade> GetStudentGrades(int studentId, int order)
         {
-            var studentGrades = context.Set<StudentCourseGrade>()
+            var allStudentGrades = context.Set<StudentCourseGrade>()
                 .Include(x => x.Fkstudent)
                 .Include(x => x.Fkgrade)
                 .Include(X => X.Fkcourse)
                 .Where(x => x.FkstudentId == studentId)
                 .ToList();
+
+            var studentGrades = allStudentGrades.OrderBy(x => x.Fkgrade.GradeName);
             if (order == 1/*"gradeasc"*/)
             {
-                studentGrades.OrderBy(x => x.Fkgrade.GradeName);
+                studentGrades=allStudentGrades.OrderBy(x => x.Fkgrade.GradeName);
             }
             if (order == 2/*"gradedesc"*/)
             {
-                studentGrades.OrderByDescending(x => x.Fkgrade.GradeName);
+                studentGrades=allStudentGrades.OrderByDescending(x => x.Fkgrade.GradeName);
             }
             if (order == 3/*courseasc*/)
             {
-                studentGrades.OrderBy(x => x.Fkcourse.CourseName);
+                studentGrades=allStudentGrades.OrderBy(x => x.Fkcourse.CourseName);
             }
             if (order == 4/*"coursedesc"*/)
             {
-                studentGrades.OrderByDescending(x => x.Fkcourse.CourseName);
+                studentGrades=allStudentGrades.OrderByDescending(x => x.Fkcourse.CourseName);
             }
             return studentGrades;
         }
         //Created for possible future use
-        internal List<StudentCourseGrade> GetStudentGradesInCourse(int courseId, int order)
+        internal IOrderedEnumerable<StudentCourseGrade> GetStudentGradesInCourse(int courseId, int order)
         {
-            var courseGrades = context.Set<StudentCourseGrade>()
+            var allCourseGrades = context.Set<StudentCourseGrade>()
                 .Include(x => x.Fkstudent)
                 .Include(x => x.Fkgrade)
                 .Include(X => X.Fkcourse)
                 .Where(x => x.FkcourseId == courseId)
                 .ToList();
+
+            var courseGrades=allCourseGrades.OrderBy(x => x.Fkgrade.GradeName);
             if (order == 1/*"gradeasc"*/)
             {
-                courseGrades.OrderBy(x => x.Fkgrade.GradeName);
+                courseGrades=allCourseGrades.OrderBy(x => x.Fkgrade.GradeName);
             }
             if (order == 2/*"gradedesc"*/)
             {
-                courseGrades.OrderByDescending(x => x.Fkgrade.GradeName);
+                courseGrades=allCourseGrades.OrderByDescending(x => x.Fkgrade.GradeName);
             }
             if (order == 3/*courseasc*/)
             {
-                courseGrades.OrderBy(x => x.Fkcourse.CourseName);
+                courseGrades=allCourseGrades.OrderBy(x => x.Fkcourse.CourseName);
             }
             if (order == 4/*"coursedesc"*/)
             {
-                courseGrades.OrderByDescending(x => x.Fkcourse.CourseName);
+                courseGrades=allCourseGrades.OrderByDescending(x => x.Fkcourse.CourseName);
             }
             return courseGrades;
         }
@@ -72,49 +76,52 @@ namespace Labb3Skolan.Controllers
                 .ToList();
             return courseGrades;
         }
-        internal List<StudentCourseGrade> GetStudentsInCourse(int courseId, int order)
+        internal IOrderedEnumerable<StudentCourseGrade> GetStudentsInCourse(int courseId, int order)
         {
-            var studentsInCourse = context.Set<StudentCourseGrade>()
+            var allStudentsInCourse = context.Set<StudentCourseGrade>()
                 .Include(x => x.Fkstudent)
                 .Include(X => X.Fkcourse)
                 .Where(x => x.FkcourseId == courseId)
                 .ToList();
+
+            var studentsInCourse=allStudentsInCourse.OrderBy(x => x.Fkstudent.LastName);
             if (order == 1/*"gradeasc"*/)
             {
-                studentsInCourse.OrderBy(x => x.Fkgrade.GradeName);
+                studentsInCourse=allStudentsInCourse.OrderBy(x => x.Fkstudent.LastName);
             }
             if (order == 2/*"gradedesc"*/)
             {
-                studentsInCourse.OrderByDescending(x => x.Fkgrade.GradeName);
+                studentsInCourse=allStudentsInCourse.OrderBy(x => x.Fkstudent.FirstName);
             }
             if (order == 3/*courseasc*/)
             {
-                studentsInCourse.OrderBy(x => x.Fkcourse.CourseName);
+                studentsInCourse=allStudentsInCourse.OrderByDescending(x => x.Fkstudent.LastName);
             }
             if (order == 4/*"coursedesc"*/)
             {
-                studentsInCourse.OrderByDescending(x => x.Fkcourse.CourseName);
+                studentsInCourse=allStudentsInCourse.OrderByDescending(x => x.Fkstudent.FirstName);
             }
             return studentsInCourse;
         }
-        internal List<StudentCourseGrade> GetRecentGrades()
+        internal IOrderedEnumerable<StudentCourseGrade> GetRecentGrades()
         {
-            var recentGrades = context.Set<StudentCourseGrade>()
+            var allRecentGrades = context.Set<StudentCourseGrade>()
                 .Include(x => x.Fkstudent)
                 .Include(x => x.Fkgrade)
                 .Include(X => X.Fkcourse)
                 .Where(x => x.GradeDate > DateTime.Now.AddMonths(-1))
                 .ToList();
-            recentGrades.OrderBy(x => x.Fkcourse.CourseName);
+            var recentGrades=allRecentGrades.OrderBy(x => x.Fkcourse.CourseName);
            
             return recentGrades;
         }
+        //Created for possible future use
         internal void PrintStudentGrades(int studentId)
         {
             Console.WriteLine("Order List by: ");
             int order = MenuController.Menu("Grade Ascending","Grade Descending","Course Ascending","Course Descending");
             var grades = GetStudentGrades(studentId,order);
-            Console.WriteLine("Name: " + grades[0].Fkstudent.FirstName);
+            Console.WriteLine("Name: " +grades.FirstOrDefault().Fkstudent.FirstName);
             foreach (var item in grades)
             {
                 Console.WriteLine(item.Fkcourse.CourseName + "\t" + item.Fkgrade.GradeName);
@@ -164,7 +171,7 @@ namespace Labb3Skolan.Controllers
             {
                 int order = MenuController.Menu("last name. ascending", "first name. ascending", "last name. descending", "first name. descending");
                 var students = GetStudentsInCourse(courseId, order);
-                Console.WriteLine("Course: " + students[0].Fkcourse.CourseName);
+                Console.WriteLine("Course: " + students.FirstOrDefault().Fkcourse.CourseName);
                 foreach (var item in students)
                 {
                     Console.WriteLine(item.Fkstudent.FirstName + " " + item.Fkstudent.LastName);

@@ -129,12 +129,15 @@ namespace Labb3Skolan.Controllers
         }
         internal void PrintAverageCourseGrades()
         {
-            decimal totalGrades=0;
+            
             var courseGrades = GetGradesAndCourses();
             var groupedGrades = courseGrades.GroupBy(x => x.Fkcourse.CourseId);
             foreach (var course in groupedGrades)
             {
-                totalGrades = 0;
+                decimal totalGrades = 0;
+                decimal decimalGrade;
+                decimal lowestGrade = 5;
+                decimal highestGrade = 0;
                 var x = course.ToList();
                 Console.WriteLine(x.First().Fkcourse.CourseName);
                 
@@ -143,9 +146,14 @@ namespace Labb3Skolan.Controllers
                     if (grade.Fkgrade.GradeName != "N/A")
                     {
                         totalGrades += GradeToDecimal(grade.Fkgrade.GradeName);
+                        decimalGrade = GradeToDecimal(grade.Fkgrade.GradeName);
+                        if (decimalGrade <= lowestGrade) { lowestGrade = decimalGrade; }
+                        if (decimalGrade >= highestGrade) { highestGrade = decimalGrade; }
                     }
                 }
                 string avgGrade = GradeToString(Math.Round(totalGrades / x.Count()));
+                if (lowestGrade < 5 && lowestGrade!=0) { Console.WriteLine($"Lowest grade: {GradeToString(lowestGrade)}"); }
+                if (highestGrade > 0) { Console.WriteLine($"Highest grade: {GradeToString(highestGrade)}"); }
                 Console.WriteLine("Average grade: "+avgGrade +"\n"); 
             }
         }

@@ -77,7 +77,7 @@ namespace Labb3Skolan.Controllers
         /// <summary>
         ///Transfers numeric grades back to a named grade, after calculating average
         /// </summary>
-        /// <param name="grade">average grade as int (0-4)</param>
+        /// <param name="grade">average grade as decimal (0-4)</param>
         /// <returns>Named grade as in database</returns>
         internal string GradeToString(decimal grade)
         {
